@@ -1,14 +1,7 @@
-import { onMount } from 'solid-js';
+import { Accessor, createEffect, onMount } from 'solid-js';
+import TairikuStatsType from '../interfaces/TairikuStats';
 
-export default function TairikuStats({
-    indexedImages = 3275447,
-    indexedCategories = 218,
-    queriesHandled = 703715
-}: {
-    indexedImages?: number;
-    indexedCategories?: number;
-    queriesHandled?: number;
-}) {
+export default function TairikuStats({ tairikuStats }: { tairikuStats: Accessor<TairikuStatsType> }) {
     const formatNumber = (num: number): string => {
         if (num >= 1000000) {
             const mlns = (num / 1000000).toFixed(1);
@@ -17,15 +10,10 @@ export default function TairikuStats({
             const thousands = (num / 1000).toFixed(1);
             return `${thousands} tys`;
         }
-
         return num.toLocaleString('pl-PL');
     }
 
     const today = new Date().toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' });
-
-    const _indexedImages = formatNumber(indexedImages),
-        _indexedCategories = formatNumber(indexedCategories),
-        _queriesHandled = formatNumber(queriesHandled);
 
     let indexedImagesCountRef: HTMLDivElement | ((el: HTMLDivElement) => void) | undefined,
         indexedCategoriesCountRef: HTMLDivElement | ((el: HTMLDivElement) => void) | undefined,
@@ -34,7 +22,10 @@ export default function TairikuStats({
         indexedCategoriesCountAnim,
         queriesHandledCountAnim;
 
-    onMount(async () => {
+    const createAnimations = async () => {
+        if (tairikuStats().total_ascriptions === undefined ||
+            tairikuStats().total_categories === undefined ||
+            tairikuStats().total_images === undefined) return;
         const countUpModule = await import('countup.js');
         const options = {
             startVal: 0,
@@ -42,6 +33,10 @@ export default function TairikuStats({
             scrollSpyOnce: true,
             duration: 2.5,
         };
+
+        const _indexedImages = formatNumber(tairikuStats().total_images || 0),
+            _indexedCategories = formatNumber(tairikuStats().total_categories || 0),
+            _queriesHandled = formatNumber(tairikuStats().total_ascriptions || 0);
 
         if (indexedImagesCountRef instanceof HTMLElement) {
             let [number, suffix] = _indexedImages.split(' ');
@@ -60,7 +55,11 @@ export default function TairikuStats({
             suffix = suffix === undefined ? '' : ` ${suffix}`;
             queriesHandledCountAnim = new countUpModule.CountUp(queriesHandledCountRef, parseFloat(number), { ...options, decimalPlaces: 1, suffix });
         }
-    });
+    }
+
+    onMount(async () => await createAnimations());
+
+    createEffect(async () => await createAnimations(), tairikuStats().total_ascriptions);
 
     return (
         <div class="container relative my-[4rem] lg:my-[7rem] mx-auto">
@@ -75,7 +74,7 @@ export default function TairikuStats({
             <div class="grid md:grid-cols-2 gap-6 lg:grid-cols-3 xl:gap-8">
                 <div class="p-6 bg-neutral-50 dark:bg-neutral-800 rounded-2xl dark:border-neutral-800">
                     <h3 class="text-2xl font-semibold leading-none text-neutral-900 md:text-3xl dark:text-neutral-200">
-                        <p class="inline" ref={indexedImagesCountRef}>{_indexedImages}</p> +
+                        <p class="inline" ref={indexedImagesCountRef}>Loading...</p> {tairikuStats().total_images !== undefined ? "+" : ""}
                     </h3>
                     <span class="block text-sm text-neutral-500 mt-3 sm:text-base dark:text-neutral-400">
                         Zindeksowanych grafik w bazie (stan na {today})
@@ -83,7 +82,7 @@ export default function TairikuStats({
                 </div>
                 <div class="p-6 bg-neutral-50 dark:bg-neutral-800 rounded-2xl dark:border-neutral-800">
                     <h3 class="text-2xl font-semibold leading-none text-neutral-900 md:text-3xl dark:text-neutral-200">
-                        <p class="inline" ref={indexedCategoriesCountRef}>{_indexedCategories}</p>
+                        <p class="inline" ref={indexedCategoriesCountRef}>Loading...</p>
                     </h3>
                     <span class="block text-sm text-neutral-500 mt-3 sm:text-base dark:text-neutral-400">
                         Zindeksowanych kategorii grafik (stan na {today})
@@ -91,7 +90,7 @@ export default function TairikuStats({
                 </div>
                 <div class="p-6 bg-neutral-50 dark:bg-neutral-800 rounded-2xl dark:border-neutral-800">
                     <h3 class="text-2xl font-semibold leading-none text-neutral-900 md:text-3xl dark:text-neutral-200">
-                        <p class="inline" ref={queriesHandledCountRef}>{_queriesHandled}</p> +
+                        <p class="inline" ref={queriesHandledCountRef}>Loading...</p> {tairikuStats().total_ascriptions !== undefined ? "+" : ""}
                     </h3>
                     <span class="block text-sm text-neutral-500 mt-3 sm:text-base dark:text-neutral-400">
                         Obsłużonych zapytań (stan na {today})

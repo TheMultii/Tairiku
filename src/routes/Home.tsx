@@ -1,11 +1,14 @@
 import { createSignal, onMount } from "solid-js";
 import { Footer, TairikuPopularTags, TairikuStats } from "../components";
 import { decodeBlurHash } from "fast-blurhash";
+import TairikuStatsType from "../interfaces/TairikuStats";
+import TairikuGeneratedImageType from "../interfaces/TairikuGeneratedImage";
 
 export default function Home() {
 
     const homeCategory: string = 'streetmoe';
 
+    const [tairikuStats, setTairikuStats] = createSignal<TairikuStatsType>({} as TairikuStatsType);
     const [wasHomeTairikuBackgroundLoaded, setWasHomeTairikuBackgroundLoaded] = createSignal<boolean>(false);
     let HomeTairikuBackgroundDiv: HTMLDivElement | ((el: HTMLDivElement) => void) | undefined;
 
@@ -22,10 +25,10 @@ export default function Home() {
         }
     };
 
-    onMount(async () => {
+    const _getTairikuBackground = async () => {
         const response = await fetch(`https://api.mganczarczyk.pl/tairiku/${homeCategory}?safety=true`);
         if (response.status != 200) return;
-        const data = await response.json();
+        const data: TairikuGeneratedImageType = await response.json();
         if (!data) return;
         setTimeout(() => loadImage(`https://api.mganczarczyk.pl/tairiku/display/${data.id}`), 1000);
         if (HomeTairikuBackgroundDiv instanceof HTMLElement) {
@@ -44,6 +47,21 @@ export default function Home() {
                     HomeTairikuBackgroundDiv.style.backgroundImage = `url(${canvas.toDataURL()})`;
             }
         }
+    }
+
+    const _getTairikuStats = async () => {
+        const response = await fetch(`https://api.mganczarczyk.pl/tairiku/stats`);
+        if (response.status != 200) return;
+        const data: TairikuStatsType = await response.json();
+        if (!data) return;
+        setTairikuStats(data);
+    }
+
+    onMount(async () => {
+        const promise_getTairikuBackground = _getTairikuBackground(),
+            promise_getTairikuStats = _getTairikuStats();
+
+        await Promise.all([promise_getTairikuBackground, promise_getTairikuStats]);
     });
 
     return (
@@ -64,7 +82,7 @@ export default function Home() {
                 </div>
                 <img src="https://images.unsplash.com/photo-1553880607-dbed5f97aba4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1885&q=80" class="bg-img z-[-1] pointer-events-none absolute top-0 left-0 w-full h-screen max-h-screen overflow-hidden object-cover object-[center_45%]" alt="" />
             </header>
-            <TairikuStats />
+            <TairikuStats tairikuStats={tairikuStats} />
             <div ref={HomeTairikuBackgroundDiv} class="w-full h-[90vh] md:h-[70vh] bg-fixed bg-center bg-cover relative after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:z-2 after:bg-[rgba(0,0,0,.7)] after:z-[0]">
                 {
                     !wasHomeTairikuBackgroundLoaded() && (
