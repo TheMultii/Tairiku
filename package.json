@@ -20,6 +20,7 @@
   "dependencies": {
     "@solidjs/router": "^0.8.2",
     "fast-blurhash": "^1.1.2",
+    "oidc-client": "^1.11.5",
     "react-countup": "^6.4.2",
     "solid-js": "^1.7.5"
   }
