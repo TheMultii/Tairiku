@@ -1,12 +1,11 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import Home from "./routes/Home.tsx";
+import { Home, Login, LoginCallback, Test, Logout } from "./routes";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import LoginCallback from "./routes/LoginCallback.tsx";
-import Test from "./routes/Test.tsx";
-import Logout from "./routes/Logout.tsx";
-import Login from "./routes/Login.tsx";
-import TairikuTokenDataExtended from "./interfaces/TairikuTokenDataExtended.ts";
+import { TairikuTokenDataExtended } from "./types";
+import { StrictMode } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const router = createBrowserRouter([
     {
@@ -42,6 +41,21 @@ if (access_token) {
     }
 }
 
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: Infinity,
+        },
+    },
+});
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <RouterProvider router={router} />
+    <StrictMode>
+        <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+            {import.meta.env.DEV && (
+                <ReactQueryDevtools initialIsOpen={false} />
+            )}
+        </QueryClientProvider>
+    </StrictMode>
 );

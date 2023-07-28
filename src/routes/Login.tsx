@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { login } from "../helpers/auth_helper";
+import { login } from "../helpers";
 
-export default function Login() {
+export const Login = () => {
     useEffect(() => {
         const _login = async () => await login();
         _login();
     }, []);
 
     return <></>;
-}
+};

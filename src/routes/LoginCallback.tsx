@@ -1,10 +1,9 @@
 import { User, UserManager } from "oidc-client";
-import TairikuTokenData from "../interfaces/TairikuTokenData";
-import TairikuTokenDataExtended from "../interfaces/TairikuTokenDataExtended";
-import { decodeToken } from "../helpers/auth_helper";
+import { TairikuTokenData, TairikuTokenDataExtended } from "../types";
+import { decodeToken } from "../helpers";
 import { useEffect } from "react";
 
-export default function LoginCallback() {
+export const LoginCallback = () => {
     useEffect(() => {
         const _loginCallback = async () => {
             try {
@@ -12,17 +11,12 @@ export default function LoginCallback() {
                 await userManager.signinCallback();
 
                 const user: User = (await userManager.getUser()) as User,
-                    decodedToken = decodeToken(user.access_token),
-                    expirationDate = new Date(user.expires_at * 1000);
+                    decodedToken = decodeToken(user.access_token);
 
-                //@ts-ignore
-                const cookie_expire = {
-                        expires: expirationDate,
-                    },
-                    headers = {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${user.access_token}`,
-                    };
+                const headers = {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user.access_token}`,
+                };
                 const response = await fetch(
                     "https://api.mganczarczyk.pl/user",
                     {
@@ -58,4 +52,4 @@ export default function LoginCallback() {
     }, []);
 
     return <></>;
-}
+};

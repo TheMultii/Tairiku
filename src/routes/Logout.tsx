@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { logout } from "../helpers/auth_helper";
+import { logout } from "../helpers";
 
-export default function Logout() {
+export const Logout = () => {
     useEffect(() => {
         const _logout = async () => await logout();
         _logout();
     }, []);
 
     return <></>;
-}
+};

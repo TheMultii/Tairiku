@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import TairikuTokenDataExtended from "../interfaces/TairikuTokenDataExtended";
+import { TairikuTokenDataExtended } from "../types";
+import { Link } from "react-router-dom";
 
-export default function Test() {
-    const [user, setUser] = useState<TairikuTokenDataExtended | null>(null);
+export const Test = () => {
+    const [user, setUser] = useState<TairikuTokenDataExtended>();
 
     useEffect(() => {
         const _test = async () => {
@@ -16,20 +17,20 @@ export default function Test() {
     }, []);
 
     return (
-        <div>
+        <Link to="/">
             <h1>
                 Logged in as{" "}
-                {user !== null ? user?.profile.preferred_username : "nobody"}
+                {user ? user?.profile.preferred_username : "nobody"}
             </h1>
-            <h2>Token: {user !== null ? user?.access_token : ""}</h2>
+            <h2>Token: {user ? user?.access_token : ""}</h2>
             <h3>
                 Permissions:{" "}
-                {user !== null
+                {user
                     ? user?.realm_access.roles.map((e, _) => {
                           return `${e}, `;
                       })
                     : "/"}
             </h3>
-        </div>
+        </Link>
     );
-}
+};
