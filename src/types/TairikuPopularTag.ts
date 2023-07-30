@@ -1,3 +1,4 @@
-export type TairikuPopularTag = {
-    name: string;
-};
+export interface TairikuPopularTag {
+  name: string
+  path: string
+}

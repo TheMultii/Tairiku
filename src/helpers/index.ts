@@ -1,3 +1,3 @@
-export { getUser, login, logout, register, decodeToken } from "./auth";
-export { getCookie, setCookie, eraseCookie } from "./cookies";
-export { formatNumber } from "./formatNumber";
+export { decodeToken, getUser, login, logout, register } from './auth'
+export { eraseCookie, getCookie, setCookie } from './cookies'
+export { formatNumber } from './formatNumber'

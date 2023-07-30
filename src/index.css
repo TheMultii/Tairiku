@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 @layer utilities {
-    .transparent-text {
-        -webkit-text-fill-color: transparent;
-        -webkit-text-stroke-color: #ffffff;
-        -webkit-text-stroke-width: 1px;
-    }
+  .transparent-text {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-color: #ffffff;
+    -webkit-text-stroke-width: 1px;
+  }
 }
