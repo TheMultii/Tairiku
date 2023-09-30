@@ -1,4 +1,5 @@
 export { Footer } from './Footer'
+export { Header } from './Header'
 export { TairikuMasonryItem } from './TairikuMasonryItem'
 export { TairikuPopularTags } from './TairikuPopularTags'
 export { TairikuStats } from './TairikuStats'
