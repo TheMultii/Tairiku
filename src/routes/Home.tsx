@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { decodeBlurHash } from 'fast-blurhash'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Footer, TairikuPopularTags, TairikuStats } from '../components'
+import { TairikuPopularTags, TairikuStats } from '../components'
 import {
   type TairikuGeneratedImageResponse,
   type TairikuStats as TairikuStatsType,
@@ -127,7 +127,6 @@ export const Home = () => {
         </div>
       </div>
       <TairikuPopularTags />
-      <Footer />
     </>
   )
 }
