@@ -2,12 +2,12 @@ import { UserManager, type UserManagerSettings } from 'oidc-client'
 import { type TairikuTokenDataExtended } from '../types'
 
 const settings: UserManagerSettings = {
-  authority: 'https://auth.mganczarczyk.pl/realms/mganczarczyk',
-  client_id: 'tairiku_frontend',
-  redirect_uri: 'http://192.168.1.34:3000/login-callback',
-  post_logout_redirect_uri: 'http://192.168.1.34:3000/',
-  response_type: 'code',
-  scope: 'openid profile email',
+  authority: import.meta.env.VITE_AUTHORITY,
+  client_id: import.meta.env.VITE_CLIENT_ID,
+  redirect_uri: import.meta.env.VITE_REDIRECT_URL,
+  post_logout_redirect_uri: import.meta.env.VITE_POST_LOGOUT_REDIRECT_URL,
+  response_type: import.meta.env.VITE_RESPONSE_TYPE,
+  scope: import.meta.env.VITE_SCOPE,
 }
 
 const userManager = new UserManager(settings)
