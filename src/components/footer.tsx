@@ -8,7 +8,7 @@ export const Footer = () => {
     <footer className="bg-dark-200 py-8 text-center">
       <h1>
         Copyright &copy; {copyDate} —{' '}
-        <a href="https://beta.mganczarczyk.pl" className="text-primary">
+        <a href="https://mganczarczyk.pl" className="text-primary">
           Marcel Gańczarczyk
         </a>
       </h1>
