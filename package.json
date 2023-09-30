@@ -4,15 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "bunx --bun vite",
+    "build": "tsc && bunx --bun vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint src --ext ts,tsx,js,jsx --report-unused-disable-directives --max-warnings 0 --fix",
-    "preview": "vite preview"
+    "preview": "bunx --bun vite preview"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.0.0-beta.5",
-    "@tanstack/react-query-devtools": "^5.0.0-beta.5",
+    "@tanstack/react-query": "rc",
+    "@tanstack/react-query-devtools": "rc",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
     "countup.js": "^2.7.0",
@@ -23,6 +23,7 @@
     "oidc-client": "^1.11.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-feather": "^2.0.10",
     "react-router-dom": "^6.12.0",
     "react-use": "^17.4.0",
     "sort-by": "^1.2.0"
