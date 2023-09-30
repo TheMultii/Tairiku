@@ -45,7 +45,7 @@ export const TairikuPopularTags = () => {
     },
     {
       name: 'Midriff',
-      path: '/midriff',
+      path: '/animemidriff',
     },
     {
       name: 'Waifu Diffusion',
